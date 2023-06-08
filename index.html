@@ -5,10 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
     <title>Calculator</title>
 </head>
 <body>
-    <script src="script.js"></script>
-    <button type='button' class='test' onclick="declareTruth()">Crick Deep</button>
+    <div class="calculator">
+        <div class="display">
+            <div class="display-window">
+                <p class="displayed-number" id="displayed-number"></p>
+            </div>
+        </div>
+        <div class="big-buttons">
+            <span class="left-span"></span>
+            <button type='button' class="big-button" onclick="clearNumber()">CLEAR</button>
+            <button type='button' class="big-button">DELETE</button>
+            <span class="right-span"></span>
+        </div>
+        <div class="buttons">
+            <span class="left-span"></span>
+            <button type="button" class="button">7</button>
+            <button type="button" class="button">8</button>
+            <button type="button" class="button">9</button>
+            <button type="button" class="button">/</button>
+            <span class="right-span"></span>
+        </div>
+        <div class="buttons">
+            <span class="left-span"></span>
+            <button type="button" class="button">4</button>
+            <button type="button" class="button">5</button>
+            <button type="button" class="button">6</button>
+            <button type="button" class="button">x</button>
+            <span class="right-span"></span>
+        </div>
+        <div class="buttons">
+            <span class="left-span"></span>
+            <button type="button" class="button">1</button>
+            <button type="button" class="button">2</button>
+            <button type="button" class="button">3</button>
+            <button type="button" class="button">-</button>
+            <span class="right-span"></span>
+        </div>
+        <div class="buttons bottom-buttons">
+            <span class="left-span"></span>
+            <button type="button" class="button">.</button>
+            <button type="button" class="button">0</button>
+            <button type="button" class="button">=</button>
+            <button type="button" class="button">+</button>
+            <span class="right-span"></span>
+        </div>
+    </div>
+    <div class="footer">
+        <p class="footer-text">Copyright © 2023 Joseph Simko</p>
+        <a href='https://www.github.com/simkoj44' target='_blank' rel='noreferrer'>  <img class='logo' src='github.png' alt='GitHub Logo'/></a>
+    </div>
 </body>
 </html>
