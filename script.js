@@ -4,19 +4,29 @@ let displayed = '0';
 let num1 =  '';
 let operator = '';
 let num2 = '';
+let equation = '';
 
-const display = document.querySelector('#displayed-number');
-display.textContent = displayed;
+const numberDisplay = document.querySelector('#displayed-number');
+numberDisplay.textContent = displayed;
+
+const equationDisplay = document.querySelector('#displayed-equation');
+equationDisplay.textContent = equation;
 
 function updateDisplayed() {
-    // ROUND LONG DECIMALS
-    
     displayed = String(displayed);
+
+    if (displayed.indexOf('.') != -1) {
+        if ((displayed.length - (displayed.indexOf('.')) - 1) > 4) {
+            value = parseFloat(displayed);
+            rounded = value.toFixed(4);
+            displayed = String(rounded);
+        }
+    }
     
     if (displayed.length == 0) {
         displayed = '0';
     }
-    display.textContent = displayed;
+    numberDisplay.textContent = displayed;
 }
 
 function clearNumber() {
@@ -25,6 +35,10 @@ function clearNumber() {
     num1 = '';
     num2 = '';
     updateDisplayed();
+
+    equation = '';
+    equationDisplay.textContent = equation;
+
 }
 
 function deleteNumber() {
@@ -62,18 +76,18 @@ function addDecimal() {
 const operators = document.querySelectorAll('.operator');
 operators.forEach((button) => {
     button.addEventListener('click', (e) => {
-        if (num1 != '') {
+        if (operator != '') {
             num2 = displayed;
             operate();
             operator = e.target.value;
             displayed = '';
-            console.log(num1 + ' ' + operator);
         } else {
             num1 = displayed;
             operator = e.target.value;
-            console.log(num1 + ' ' + operator);
             displayed = '';
         }
+        equation = num1 + ' ' + operator;
+        equationDisplay.textContent = equation;
     });
 });
 
@@ -85,12 +99,14 @@ function equals() {
 }
 
 function operate() {
-    console.log(num1 + ' ' + operator + ' ' + num2 + ' =');
     if (num1 && num2) {
+
+        equation = num1 + ' ' + operator + ' ' + num2 + ' = ';
+        equationDisplay.textContent = equation;
 
         num1 = parseFloat(num1);
         num2 = parseFloat(num2);
-
+        
         switch (operator) {
             case '+':
                 add(num1, num2);
