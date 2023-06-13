@@ -12,17 +12,21 @@ numberDisplay.textContent = displayed;
 const equationDisplay = document.querySelector('#displayed-equation');
 equationDisplay.textContent = equation;
 
+window.addEventListener('keydown', handleKeyboardInput)
+function handleKeyboardInput(e) {
+    if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+    if (e.key === '.') addDecimal();
+    if (e.key === '=' || e.key === 'Enter') equals();
+    if (e.key === 'Backspace') deleteNumber();
+    if (e.key === '+' || e.key === '-' || e.key === '/') setOperator(e.key);
+    if (e.key === '*') setOperator('x');
+}
+
 function updateDisplayed() {
     displayed = String(displayed);
-
-    if (displayed.indexOf('.') != -1) {
-        if ((displayed.length - (displayed.indexOf('.')) - 1) > 4) {
-            value = parseFloat(displayed);
-            rounded = value.toFixed(4);
-            displayed = String(rounded);
-        }
+    if (displayed.length > 14) {
+        displayed = Number.parseFloat(displayed).toExponential(2);
     }
-    
     if (displayed.length == 0) {
         displayed = '0';
     }
@@ -38,10 +42,15 @@ function clearNumber() {
 
     equation = '';
     equationDisplay.textContent = equation;
-
 }
 
 function deleteNumber() {
+    // Clear number on delete if it is in exponential notation ('e'), Infinity, or NaN
+    if (displayed.indexOf('e') != -1 || displayed.indexOf('I') != -1 || displayed.indexOf('N') != -1) {
+        displayed = '0';
+    }
+
+    // Remove final character
     displayed = displayed.slice(0, -1);
     updateDisplayed();
 }
@@ -49,23 +58,35 @@ function deleteNumber() {
 const numberButtons = document.querySelectorAll('.number');
 numberButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
-        if (displayed == 'Error: Dividing by 0') {
-            displayed = '0';
-        }
-        if (displayed == '0') {
-            displayed = '';
-        }
-        displayed += e.target.value;
-        updateDisplayed();  
+        appendNumber(e.target.value);
     });
 });
 
-function addDecimal() {
-    if (displayed == 'Error: Dividing by 0') {
-        displayed = '0';
+function appendNumber(value) {
+    if (displayed == '0') {
+        displayed = '';
     }
+    if (displayed.indexOf('I') != -1 || displayed.indexOf('N') != -1) {
+        return;
+    }
+    if (displayed.indexOf('e') != -1) {
+        displayed = parseFloat(displayed);
+        if (displayed > 1000000000000000000000n) {
+            displayed = String(displayed);
+            return;
+        }
+    }
+    displayed = String(displayed);
+    displayed += value;
+    updateDisplayed();  
+}
+
+function addDecimal() {
     if (displayed == '') {
         displayed += '0';
+    }
+    if (displayed.indexOf('e') != -1 || displayed.indexOf('I') != -1 || displayed.indexOf('N') != -1) {
+        return;
     }
     if (displayed.indexOf('.') == -1 ) {
         displayed += '.';
@@ -76,20 +97,24 @@ function addDecimal() {
 const operators = document.querySelectorAll('.operator');
 operators.forEach((button) => {
     button.addEventListener('click', (e) => {
-        if (operator != '') {
-            num2 = displayed;
-            operate();
-            operator = e.target.value;
-            displayed = '';
-        } else {
-            num1 = displayed;
-            operator = e.target.value;
-            displayed = '';
-        }
-        equation = num1 + ' ' + operator;
-        equationDisplay.textContent = equation;
+        setOperator(e.target.value);
     });
 });
+
+function setOperator(value) {
+    if (operator != '') {
+        num2 = displayed;
+        operate();
+        operator = value;
+        displayed = '';
+    } else {
+        num1 = displayed;
+        operator = value;
+        displayed = '';
+    }
+    equation = num1 + ' ' + operator;
+    equationDisplay.textContent = equation;
+}
 
 function equals() {
     if (num1 && operator) {
@@ -130,32 +155,28 @@ function operate() {
 
 function add(val1, val2) {
     displayed = val1 + val2;
+    displayed = Math.round(displayed * 1000) / 1000;
     num1 = displayed;
     updateDisplayed();
 }
 
 function subtract(val1, val2) {
     displayed = val1 - val2;
+    displayed = Math.round(displayed * 1000) / 1000;
     num1 = displayed;
     updateDisplayed();
 }
 
 function multiply(val1, val2) {
     displayed = val1 * val2;
+    displayed = Math.round(displayed * 1000) / 1000;
     num1 = displayed;
     updateDisplayed();
 }
 
 function divide(val1, val2) {
-    if (val2 == 0) {
-        displayed = "Error: Dividing by 0";
-        num1 = '';
-        num2 = '';
-        operator = '';
-        updateDisplayed();
-        return;
-    }
     displayed = val1 / val2;
+    displayed = Math.round(displayed * 1000) / 1000;
     num1 = displayed;
     updateDisplayed();
 }
