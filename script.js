@@ -19,7 +19,11 @@ window.addEventListener('keydown', handleKeyboardInput)
 function handleKeyboardInput(e) {
     if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
     if (e.key === '.') addDecimal();
-    if (e.key === '=' || e.key === 'Enter') equals();
+    if (e.key === '=' || e.key === 'Enter') {
+        equals();
+        // Prevent the Enter key from selecting a button in focus
+        e.preventDefault();
+    } 
     if (e.key === 'Backspace') deleteNumber();
     if (e.key === '+' || e.key === '-' || e.key === '/') setOperator(e.key);
     if (e.key === '*') setOperator('x');
