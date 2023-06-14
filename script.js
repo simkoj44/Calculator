@@ -87,7 +87,7 @@ function appendNumber(value) {
     if (displayed.indexOf('e') != -1) {
         displayed = parseFloat(displayed);
         // If the value is greater than the max supported value for floats in JavaScript, convert displayed back to a Strong and exit function without appending number
-        if (displayed > 1000000000000000000000n) {
+        if (Math.abs(displayed) > 1000000000000000000000n) {
             displayed = String(displayed);
             return;
         }
